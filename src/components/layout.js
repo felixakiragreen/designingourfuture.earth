@@ -1,52 +1,83 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
+/** @jsx jsx */
+import React, { useState, useRef } from 'react'
+import { jsx, Styled, Layout, Main, Container } from 'theme-ui'
+import { Global } from '@emotion/core'
 
-import React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import './publicsans.css'
 
-import Header from "./header"
-import "./layout.css"
+import Head from './head'
+import Header from './header'
+import Sidebar from './sidebar'
+import Footer from './footer'
 
-const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
+export default props => {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const nav = useRef(null)
 
   return (
-    <>
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0px 1.0875rem 1.45rem`,
-          paddingTop: 0,
+    <Styled.root>
+      <Head {...props} />
+      <Global
+        styles={{
+          '*': {
+            boxSizing: 'border-box',
+          },
+          body: {
+            margin: 0,
+          },
         }}
-      >
-        <main>{children}</main>
-        <footer>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
-        </footer>
-      </div>
-    </>
+      />
+      <Layout>
+        <Header nav={nav} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <Main>
+          <Container
+            sx={{
+              pt: 0,
+              pb: 5,
+              px: props.fullwidth ? 0 : 3,
+              maxWidth: props.fullwidth ? 'none' : '',
+            }}
+          >
+            <div
+              sx={{
+                display: ['block', 'flex'],
+                mx: props.fullwidth ? 0 : -3,
+              }}
+            >
+              <div
+                ref={nav}
+                onFocus={e => {
+                  setMenuOpen(true)
+                }}
+                onBlur={e => {
+                  setMenuOpen(false)
+                }}
+                onClick={e => {
+                  setMenuOpen(false)
+                }}
+              >
+                <Sidebar
+                  open={menuOpen}
+                  sx={{
+                    display: [null, props.fullwidth ? 'none' : 'block'],
+                  }}
+                />
+              </div>
+              <div
+                id="content"
+                sx={{
+                  width: '100%',
+                  minWidth: 0,
+                  px: props.fullwidth ? 0 : 3,
+                }}
+              >
+                {props.children}
+              </div>
+            </div>
+          </Container>
+        </Main>
+        <Footer />
+      </Layout>
+    </Styled.root>
   )
 }
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-}
-
-export default Layout
