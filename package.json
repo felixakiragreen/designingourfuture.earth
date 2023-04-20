@@ -16,7 +16,7 @@
     "gatsby-plugin-mdx": "^1.0.42",
     "gatsby-plugin-offline": "^2.2.4",
     "gatsby-plugin-react-helmet": "^3.1.2",
-    "gatsby-plugin-sharp": "^2.2.22",
+    "gatsby-plugin-sharp": "^4.25.1",
     "gatsby-plugin-theme-ui": "^0.2.41",
     "gatsby-source-filesystem": "^2.1.22",
     "gatsby-transformer-sharp": "^2.2.14",
